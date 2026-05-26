@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habitor - Premium Habit Sanctuary</title>
+    <!-- Premium Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      /* Base Style Reset for Premium App feel */
+      html,
+      body,
+      #app-root {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #0B0F19;
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      button, input, textarea, select {
+        font-family: inherit;
+      }
+
+      /* Native CSS rotation animation to prevent React Native Web Animated API crashes on pause/stop */
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Modern Browser View Transitions circular reveal style rules */
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none !important;
+        mix-blend-mode: normal !important;
+      }
+      ::view-transition-old(root) {
+        z-index: 1;
+      }
+      ::view-transition-new(root) {
+        z-index: 999999;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      // Fix for react-native-web + Vite Uncaught ReferenceError: global is not defined
+      if (typeof global === 'undefined') {
+        window.global = window;
+      }
+      
+      (function() {
+        if (typeof navigator !== 'undefined') {
+          const isElectron = /electron/i.test(navigator.userAgent);
+          const isAndroidWebView = /android/i.test(navigator.userAgent) && /wv/i.test(navigator.userAgent);
+          const isCapacitor = typeof window !== 'undefined' && (window.Capacitor || isAndroidWebView);
+          
+          if (isElectron || isCapacitor) {
+            try {
+              if (typeof Navigator !== 'undefined' && Navigator.prototype) {
+                Object.defineProperty(Navigator.prototype, 'onLine', { get: () => true, configurable: true });
+              } else {
+                Object.defineProperty(navigator, 'onLine', { get: () => true, configurable: true });
+              }
+              console.log('[Habitor] Packaged environment detected (Electron/Capacitor): Overrode navigator.onLine to true to bypass Firestore offline lock.');
+            } catch (e) {
+              console.error('[Habitor] Failed to override navigator.onLine:', e);
+            }
+          }
+        }
+      })();
+    </script>
+    <div id="app-root"></div>
+    <script type="module" src="/index.web.js"></script>
+  </body>
+</html>

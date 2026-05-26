@@ -1,0 +1,59 @@
+{
+  "name": "habitor",
+  "version": "1.0.0",
+  "description": "Habitor - Your Personal Habit Tracker",
+  "main": "main.js",
+  "author": "Piyush",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-builder --win",
+    "dist": "electron-builder --win --publish never"
+  },
+  "build": {
+    "appId": "com.habitor.app",
+    "productName": "Habitor",
+    "copyright": "Copyright © 2025 Piyush",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "web/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Habitor",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^42.2.0",
+    "electron-builder": "^26.8.1"
+  }
+}
