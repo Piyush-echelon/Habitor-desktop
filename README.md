@@ -1,4 +1,6 @@
-# 🔮 Habitor Desktop — Gamified Habit Tracker & Self-Discipline Sanctuary
+<img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/002a0695-8c81-48ff-9112-a6e4d8664f6b" />
+
+#  Habitor Desktop — Gamified Habit Tracker & Self-Discipline Sanctuary
 
 Habitor is a premium, beautifully-designed, offline-first habit tracker that turns your daily routines into a gamified RPG journey. Ascend your self-discipline, gain XP, climb levels, and unlock milestones.
 
@@ -20,11 +22,6 @@ Habitor is crafted to be visually stunning, encouraging daily engagement through
 - **RPG Leveling Engine**: Earn XP by logging progress on your habits. Each level increases the XP required for the next, scaling with your discipline.
 - **Milestone Achievements**: Unlock badges with rewards like *First Step* (first completion), *Consistent Pioneer* (20 completions), *Centurion* (100 completions), and *Power User* (Level 5).
 - **Milestone Popups**: Get motivated with high-fidelity, premium modal celebration overlays displaying badge descriptions and XP rewards.
-
-### 🎯 Rigid Progress Boundaries
-- **Strict Cap Protection**: Habit counters are strictly capped at their target count (e.g., stopping at `2/2` or `5/5`).
-- **XP Exploit Guard**: Prevents users from spamming the increment buttons past goals to earn extra XP once a habit is already completed.
-- **Done/Undo Logic**: Easily toggle statuses. Decrementing a completed habit cleanly rolls back the completion metrics and associated XP.
 
 ### 📊 Health & Biometrics Dashboard
 - **Activity Ring Graphs**: Visualize sleep duration, deep sleep, and quality percentages using interactive Apple-style circular SVG rings.
