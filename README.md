@@ -6,6 +6,8 @@ Habitor is a premium, beautifully-designed, offline-first habit tracker that tur
 
 Built on a modern engineering stack featuring **React Native Web**, **Vite**, and **Electron**, Habitor offers native desktop performance on Windows with beautiful animations and deep visual aesthetics.
 
+<img width="1920" height="1200" alt="Screenshot 2026-05-27 115830" src="https://github.com/user-attachments/assets/fd64c2c7-3864-4443-bff0-564fca079330" />
+
 ---
 
 ## 🎨 Design & Aesthetic Philosophy
@@ -13,6 +15,8 @@ Habitor is crafted to be visually stunning, encouraging daily engagement through
 - **Curated HSL Color System**: Deep, relaxing slate-dark background (`#0B0F19`) contrasted with vibrant accent highlights.
 - **Glassmorphism Backdrops**: Overlay dialogs (such as level-ups and milestone unlocks) use advanced CSS backdrop filter blur effects (`backdropFilter: 'blur(12px)'`) to focus user interaction elegantly.
 - **Micro-Animations**: Smooth theme transitions featuring circular visual clip reveals, responsive button highlights, and real-time biometric progress graphs.
+
+<img width="1920" height="1200" alt="Screenshot 2026-05-27 115910" src="https://github.com/user-attachments/assets/daeacfce-673c-430e-9c9e-46476fbcb12d" />
 
 ---
 
@@ -30,6 +34,9 @@ Habitor is crafted to be visually stunning, encouraging daily engagement through
 - **Book Tracker**: Log reading session parameters, titles, and author details.
 - **Widescale Consistency Heatmap**: Track annual completion grids across multi-view timelines (Daily, Weekly, Monthly, and Yearly grids) similar to GitHub's contribution graph.
 
+<img width="1920" height="1200" alt="Screenshot 2026-05-27 120007" src="https://github.com/user-attachments/assets/292b9b82-1b37-4b0e-a91a-6b8087e71115" />
+
+
 ---
 
 ## 🛠 Tech Stack
@@ -37,6 +44,8 @@ Habitor is crafted to be visually stunning, encouraging daily engagement through
 - **Build Tool**: [Vite](https://vite.dev/) (lightning-fast client compilation and hot reloading).
 - **Core Wrapper**: [Electron](https://www.electronjs.org/) (native app packaging & chromium browser execution).
 - **Storage**: Offline-first AsyncStorage persistent caching.
+
+<img width="1920" height="1200" alt="Screenshot 2026-05-27 120056" src="https://github.com/user-attachments/assets/9e8e0040-f18f-4d4b-a29a-8940c3c04b84" />
 
 ---
 
