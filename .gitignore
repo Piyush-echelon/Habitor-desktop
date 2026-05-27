@@ -44,3 +44,5 @@ android/android/app/build/
 android/android/local.properties
 android/android/captmp/
 android/android/app/src/main/assets/public/
+android/
+electron-app/*.py
