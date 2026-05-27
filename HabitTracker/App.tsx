@@ -72,6 +72,8 @@ export default function App() {
       resetData,
       showLevelUpAlert,
       dismissLevelUpAlert,
+      showAchievementAlert,
+      dismissAchievementAlert,
     } = useHabitStore();
 
   const [setupCompleted, setSetupCompleted] = useState(false);
@@ -555,6 +557,31 @@ export default function App() {
         </View>
       )}
 
+      {/* Achievement Celebration Overlay */}
+      {showAchievementAlert && (
+        <View style={styles.celebrationOverlay}>
+          <View style={[styles.celebrationCard, { backgroundColor: colors.cardBg, borderColor: colors.gold }]}>
+            <Text style={styles.celebrationEmoji}>{showAchievementAlert.icon}</Text>
+            <Text style={[styles.celebrationTitle, { color: colors.textPrimary }]}>ACHIEVEMENT UNLOCKED!</Text>
+            <Text style={[styles.celebrationSubtitle, { color: colors.textSecondary }]}>
+              {showAchievementAlert.title}
+            </Text>
+            <Text style={[styles.celebrationSubtitle, { color: colors.textMuted, marginTop: 4, fontStyle: 'italic' }]}>
+              {showAchievementAlert.description}
+            </Text>
+            <Text style={[styles.celebrationBonus, { color: colors.success, marginTop: 10, fontSize: 14, fontWeight: '800' }]}>
+              +{showAchievementAlert.xpReward} XP Reward!
+            </Text>
+            <Pressable
+              onPress={dismissAchievementAlert}
+              style={[styles.celebrationBtn, { backgroundColor: colors.accent }]}
+            >
+              <Text style={styles.celebrationBtnText}>Awesome!</Text>
+            </Pressable>
+          </View>
+        </View>
+      )}
+
       {/* Edit Profile Name Modal */}
       <Modal
         visible={renameModalVisible}
@@ -889,7 +916,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.82)',
+    backgroundColor: 'rgba(11, 15, 25, 0.75)',
+    backdropFilter: 'blur(12px)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 9999,

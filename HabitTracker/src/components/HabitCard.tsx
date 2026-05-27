@@ -187,9 +187,10 @@ export const HabitCard: React.FC<HabitCardProps> = ({
               </Pressable>
               <Pressable
                 onPress={() => onLogProgress(habit.id, dateStr, 1)}
-                style={[styles.actionBtn, { backgroundColor: colors.hover }]}
+                disabled={isCompleted}
+                style={[styles.actionBtn, { backgroundColor: colors.hover, opacity: isCompleted ? 0.35 : 1 }]}
               >
-                <VectorIcon name="plus" color={colors.textPrimary} size={14} />
+                <VectorIcon name="plus" color={isCompleted ? colors.textMuted : colors.textPrimary} size={14} />
               </Pressable>
             </>
           ) : (

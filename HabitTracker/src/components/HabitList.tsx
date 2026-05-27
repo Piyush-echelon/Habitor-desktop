@@ -884,11 +884,13 @@ export const HabitList: React.FC<HabitListProps> = ({
 
                             <Pressable
                               onPress={() => onLogProgress(habit.id, activeDay.dateStr, 1)}
+                              disabled={isCompleted}
                               style={[
                                 styles.progressiveActionBtn,
                                 {
                                   backgroundColor: isCompleted ? colors.success : colors.accent,
                                   borderColor: isCompleted ? colors.success : colors.accent,
+                                  opacity: isCompleted ? 0.35 : 1,
                                 }
                               ]}
                             >

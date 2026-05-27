@@ -109,6 +109,7 @@ export const useHabitStore = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showLevelUpAlert, setShowLevelUpAlert] = useState<{ show: boolean; level: number } | null>(null);
+  const [showAchievementAlert, setShowAchievementAlert] = useState<Achievement | null>(null);
 
 
   // Load all data on mount (AsyncStorage only — cloud restore happens in App.tsx)
@@ -201,9 +202,90 @@ export const useHabitStore = () => {
 
   // Toggle Task Completion
   const toggleTask = async (id: string) => {
-    const updatedTasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+    let xpEarned = 0;
+    let completedAction = false;
+    let revertedAction = false;
+
+    const updatedTasks = tasks.map(t => {
+      if (t.id !== id) return t;
+      const nextCompleted = !t.completed;
+      if (nextCompleted) {
+        completedAction = true;
+        xpEarned += 3;
+      } else {
+        revertedAction = true;
+        xpEarned -= 3;
+      }
+      return { ...t, completed: nextCompleted };
+    });
+
+    const completionsDelta = completedAction ? 1 : (revertedAction ? -1 : 0);
+    const totalCompletions = Math.max(0, profile.totalCompletions + completionsDelta);
+
+    let currentXp = profile.xp + xpEarned;
+    let currentLevel = profile.level;
+    let currentNextLevelXp = profile.nextLevelXp;
+    let leveledUp = false;
+
+    while (currentXp >= currentNextLevelXp) {
+      currentXp -= currentNextLevelXp;
+      currentLevel += 1;
+      currentNextLevelXp = currentLevel * 150 + 100;
+      leveledUp = true;
+    }
+
+    if (currentXp < 0) {
+      if (currentLevel > 1) {
+        currentLevel -= 1;
+        currentNextLevelXp = currentLevel * 150 + 100;
+        currentXp = currentNextLevelXp + currentXp;
+      } else {
+        currentXp = 0;
+      }
+    }
+
+    if (leveledUp) {
+      setShowLevelUpAlert({ show: true, level: currentLevel });
+    }
+
+    const updatedAchievements = achievements.map((ach): Achievement => {
+      if (ach.unlocked) return ach;
+
+      let meetsRequirement = false;
+      if (ach.type === 'completions' && totalCompletions >= ach.requirement) {
+        meetsRequirement = true;
+      } else if (ach.type === 'level' && currentLevel >= ach.requirement) {
+        meetsRequirement = true;
+      }
+
+      if (meetsRequirement) {
+        currentXp += ach.xpReward;
+        while (currentXp >= currentNextLevelXp) {
+          currentXp -= currentNextLevelXp;
+          currentLevel += 1;
+          currentNextLevelXp = currentLevel * 150 + 100;
+          setShowLevelUpAlert({ show: true, level: currentLevel });
+        }
+        setShowAchievementAlert(ach);
+        return { ...ach, unlocked: true };
+      }
+
+      return ach;
+    });
+
+    const updatedProfile: UserProfile = {
+      ...profile,
+      level: currentLevel,
+      xp: currentXp,
+      nextLevelXp: currentNextLevelXp,
+      totalCompletions: totalCompletions,
+      badges: updatedAchievements.filter(a => a.unlocked).map(a => a.id),
+    };
+
     setTasks(updatedTasks);
-    await saveData(habits, profile, achievements, updatedTasks);
+    setProfile(updatedProfile);
+    setAchievements(updatedAchievements);
+    await saveData(habits, updatedProfile, updatedAchievements, updatedTasks);
   };
 
   // Delete Task
@@ -267,22 +349,24 @@ export const useHabitStore = () => {
       if (habit.id !== id) return habit;
 
       const currentCount = habit.history[dateStr] || 0;
-      const newCount = Math.max(0, currentCount + delta);
+      const newCount = Math.min(habit.targetCount, Math.max(0, currentCount + delta));
       const newHistory = { ...habit.history, [dateStr]: newCount };
 
       const wasCompleted = currentCount >= habit.targetCount;
       const isCompleted = newCount >= habit.targetCount;
 
-      if (!wasCompleted && isCompleted) {
-        completedAction = true;
-        const xpMap = { easy: 10, medium: 20, hard: 30 };
-        xpEarned += xpMap[habit.difficulty];
-      } else if (wasCompleted && !isCompleted) {
-        revertedAction = true;
-        const xpMap = { easy: 10, medium: 20, hard: 30 };
-        xpEarned -= xpMap[habit.difficulty];
-      } else if (isCompleted && delta > 0) {
-        xpEarned += 2;
+      if (newCount !== currentCount) {
+        if (!wasCompleted && isCompleted) {
+          completedAction = true;
+          const xpMap = { easy: 10, medium: 20, hard: 30 };
+          xpEarned += xpMap[habit.difficulty];
+        } else if (wasCompleted && !isCompleted) {
+          revertedAction = true;
+          const xpMap = { easy: 10, medium: 20, hard: 30 };
+          xpEarned -= xpMap[habit.difficulty];
+        } else if (isCompleted && delta > 0) {
+          xpEarned += 2;
+        }
       }
 
       const calculatedStreak = calculateStreak(newHistory, habit.targetCount);
@@ -353,6 +437,7 @@ export const useHabitStore = () => {
           currentNextLevelXp = currentLevel * 150 + 100;
           setShowLevelUpAlert({ show: true, level: currentLevel });
         }
+        setShowAchievementAlert(ach);
         return { ...ach, unlocked: true };
       }
 
@@ -625,5 +710,7 @@ export const useHabitStore = () => {
     resetData,
     showLevelUpAlert,
     dismissLevelUpAlert: () => setShowLevelUpAlert(null),
+    showAchievementAlert,
+    dismissAchievementAlert: () => setShowAchievementAlert(null),
   };
 };
